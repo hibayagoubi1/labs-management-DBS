@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-lab
+  template:
+    metadata:
+      labels:
+        app: mysql-lab
+    spec:
+      containers:
+      - name: mysql-lab
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: Root
+        - name: MYSQL_DATABASE
+          value: labsdb
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-storage
+      volumes:
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc-lab
